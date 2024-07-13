@@ -647,6 +647,8 @@ void CHARACTER_E::rightBracked(CParserCSSElement* m, StateTypeE attr) {
 void CHARACTER_E::character(CParserCSSElement* m, StateTypeE attr) {
 
     // push char in string vector
+    if (attr.cssChar == '\n') return;
+
     m->itemString.push_back(attr.cssChar);
 
     if (m->getState() == DECLARATIONNAME) {
@@ -656,12 +658,7 @@ void CHARACTER_E::character(CParserCSSElement* m, StateTypeE attr) {
         m->declarationValueString.push_back(attr.cssChar);
     }
     else if (m->getState() == SELECTOR) {
-        if (attr.cssChar == '\n') {
-            m->selectorString.clear();
-        }
-        else {
-            m->selectorString.push_back(attr.cssChar);
-        }
+        m->selectorString.push_back(attr.cssChar);
     }
 }
 
