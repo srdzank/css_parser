@@ -48,6 +48,15 @@ struct StateTypeE {
     char cssChar;
 };
 
+std::string trim(const std::string& str) {
+    size_t first = str.find_first_not_of(' ');
+    if (std::string::npos == first) {
+        return str;
+    }
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last - first + 1));
+}
+
 
 /*
    The CParseCSS class is dedicated to parse css content
@@ -386,9 +395,9 @@ void CParseCSS::convertToTypeData() {
         for (size_t j = 0; j < info.declarations.size(); j++) {
             //set values
             typeData item;
-            item.selector = info.selector;
-            item.name = info.declarations.at(j).name;
-            item.value = info.declarations.at(j).value;
+            item.selector = trim(info.selector);
+            item.name = trim(info.declarations.at(j).name);
+            item.value = trim(info.declarations.at(j).value);
             mData.push_back(item);
         }
     }
@@ -815,6 +824,16 @@ void COLON_E::rightBracked(CParserCSSElement* m, StateTypeE attr) {
 // previous state colon, new character
 void COLON_E::character(CParserCSSElement* m, StateTypeE attr) {
     // set new state
+    if (m->getState() == DECLARATIONNAME) {
+        m->declarationNameString.push_back(attr.cssChar);
+    }
+    else if (m->getState() == DECLARATIONVALUE) {
+        m->declarationValueString.push_back(attr.cssChar);
+    }
+    else if (m->getState() == SELECTOR) {
+        m->selectorString.push_back(attr.cssChar);
+    }
+
     m->setCurrent(new CHARACTER_E());
     delete this;
 }
