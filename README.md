@@ -1,49 +1,55 @@
 # CSS Header only parser
 ## C++
 
-#include "cparsecss.hpp" 
-#include <cstring> 
-#include <iostream> 
+#include <iostream>
+#include "cparsecss.hpp"
+#include <string>
 
-int main()  
-{  
-    string css =  
-        " h1{ "   
-        " color: white; "   
-        " text-align: center; "  
-        " } "  
-        " "  
-        " p{ "   
-        " font-family: verdana; "     
-        " font-size: 20px; "     
-        " } "  
-        " "  
-        " b2{ "  
-        " font-family: verdana; "  
-        " font-size: 20px; "  
-        " } "  
-        ;  
+using namespace std;
+
+int main()
+{
+
+    string css = R"(
+                h1
+                {
+                color:white;
+                text-align:center;
+                }
+
+                p{ 
+                font-family: verdana; 
+                font-size: 20px; 
+                } 
+         
+                b2{ 
+                font-family: verdana; 
+                font-size: 20px; 
+                } 
+
+            )";
+
+    CParseCSS p;
+    p.parse(css);
+    typeListData data = p.getData();
     
-    CParseCSS p;  
-    p.parse(css);  
-    typeListData data = p.getData();  
-      
-    for (size_t i = 0; i < data.size(); i++) {  
-        cout << data.at(i).selector << " " << data.at(i).name << " " << data.at(i).value << endl;  
-    }  
-}  
+    cout << "Selector" << " " << "Name" << " " << "Value" << endl;
+    cout << "----------------------------------" << endl;
+    for (size_t i = 0; i < data.size(); i++) {
 
+        cout << data.at(i).selector << " " << data.at(i).name << " " << data.at(i).value << endl;
+    }
+}
 
 /////////////////  result /////////////////////////////////////////////////////////
                                                                                                 
- h1  color           white  
- h1  text-align      center  
- p   font-family     verdana  
- p   font-size       20px  
- b2  font-family     verdana  
- b2  font-size       20px    
- 
-If you like to support my work.
-https://paypal.me/srdzank64?country.x=AL&locale.x=en_US
+Selector Name Value
+----------------------------------
+h1 color white
+h1 text-align center
+p font-family verdana
+p font-size 20px
+b2 font-family verdana
+b2 font-size 20px
                                          
                                     
